@@ -3,6 +3,7 @@ package com.fedorkzsoft.demo.presentation.presenter;
 import com.arellomobile.mvp.InjectViewState;
 
 import com.fedorkzsoft.demo.RxApp;
+import com.fedorkzsoft.demo.Settings;
 import com.fedorkzsoft.demo.model.CurrenciesModel;
 import com.fedorkzsoft.demo.presentation.model.Currency;
 import com.fedorkzsoft.demo.presentation.ConvertorFragmentPresenter;
@@ -24,6 +25,7 @@ import timber.log.Timber;
  */
 @InjectViewState
 public class ConvertorFragmentPresenterImpl extends ConvertorFragmentPresenter {
+    public static final int UPDATE_INTERVAL = Settings.REFRESH_INTERVAL;
     private Subscription mSubscription;
 
     @Inject CurrenciesModel mModel;
@@ -141,7 +143,7 @@ public class ConvertorFragmentPresenterImpl extends ConvertorFragmentPresenter {
     }
 
     protected void startUpdates(){
-        Observable<Long> values = Observable.interval(0, 5, TimeUnit.SECONDS);
+        Observable<Long> values = Observable.interval(0, UPDATE_INTERVAL, TimeUnit.SECONDS);
         mSubscription = values.subscribe(v -> scheduleUpdate(),
                 e -> System.out.println("Error: " + e),
                 () -> System.out.println("Completed")

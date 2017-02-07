@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">RxApp</string>
+    <string name="app_name">Demo Convertor</string>
     <string name="action_refresh">Refresh</string>
 </resources>

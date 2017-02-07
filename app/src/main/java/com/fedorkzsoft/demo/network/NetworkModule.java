@@ -1,6 +1,8 @@
 package com.fedorkzsoft.demo.network;
 
 
+import com.fedorkzsoft.demo.Settings;
+
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
@@ -12,7 +14,7 @@ public class NetworkModule {
 
     @Provides
     Api provideApi() {
-        final String ENDPOINT = "http://www.ecb.europa.eu/";
+        final String ENDPOINT = Settings.ROOT_URL;
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ENDPOINT)

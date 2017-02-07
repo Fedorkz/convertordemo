@@ -23,6 +23,7 @@ import rx.subjects.PublishSubject;
  */
 public class CurrencyPagerAdapter extends InfinitePagerAdapter {
 
+    public static final int MAX_VALUE_LENGTH = 10;
     private final LayoutInflater mInflater;
     private final Context mContext;
     private final
@@ -125,6 +126,7 @@ public class CurrencyPagerAdapter extends InfinitePagerAdapter {
         public Observable<Pair<Currency, Double>> getObservable(){
             return RxTextView.textChanges(val)
                     .filter(charSequence -> !charSequence.toString().isEmpty())
+                    .filter(charSequence -> charSequence.toString().length() < MAX_VALUE_LENGTH)
                     .map(val -> new Pair<>(currency, parseDouble(val)));
         }
 
