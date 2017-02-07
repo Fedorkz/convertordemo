@@ -3,14 +3,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
         <variable
             name="listener"
-            type="net.pmellaaho.rxapp.ui.CurrenciesAdapter.ViewHolder"/>
+            type="com.fedorkzsoft.demo.presentation.adapter.CurrenciesAdapter.ViewHolder"/>
 
         <variable
             name="currency"
-            type="net.pmellaaho.rxapp.model.Currency"/>
+            type="com.fedorkzsoft.demo.presentation.model.Currency"/>
     </data>
 
     <LinearLayout

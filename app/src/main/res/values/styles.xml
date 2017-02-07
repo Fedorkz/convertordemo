@@ -5,4 +5,15 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="CurrencyPagerText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/pager_text_size</item>
+        <item name="android:textColor">@color/currency_pager_text_color</item>
+    </style>
+
+    <style name="CurrencyPagerTextSmall" parent="CurrencyPagerText">
+        <item name="android:textSize">@dimen/pager_text_size_small</item>
+    </style>
+
 </resources>

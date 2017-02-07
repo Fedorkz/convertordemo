@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/currency_txt"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="15dp"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:singleLine="true"
+        android:text="EUR"
+        style="@style/CurrencyPagerText"/>
+
+    <TextView
+        android:id="@+id/amount_txt"
+        android:layout_below="@+id/currency_txt"
+        android:layout_marginTop="2dp"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:text="You have: "
+        style="@style/CurrencyPagerTextSmall" />
+
+    <EditText
+        android:id="@+id/val_edt"
+        android:textCursorDrawable="@null"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:maxLines="1"
+        android:inputType="numberDecimal"
+        android:text="0"
+        style="@style/CurrencyPagerText" />
+
+    <TextView
+        android:id="@+id/rate_txt"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:text="Item description"
+        android:layout_below="@+id/currency_txt"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        style="@style/CurrencyPagerTextSmall"/>
+
+</RelativeLayout>

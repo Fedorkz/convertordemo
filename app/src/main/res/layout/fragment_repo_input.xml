@@ -1,16 +1,17 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="handler"
-            type="net.pmellaaho.rxapp.ui.RepoInputFragment.MyHandler"/>
+            type="com.fedorkzsoft.demo.presentation.RepoInputFragment.MyHandler"/>
     </data>
 
     <FrameLayout xmlns:tools="http://schemas.android.com/tools"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"
-                 tools:context="net.pmellaaho.rxapp.ui.RepoInputFragment">
+                 tools:context="com.fedorkzsoft.demo.presentation.RepoInputFragment">
 
         <GridLayout
             android:layout_width="match_parent"
@@ -67,6 +68,25 @@
             android:text="Error fetching data"
             android:textAppearance="?attr/textAppearanceLargePopupMenu"
             android:visibility="invisible"/>
+
+        <!--<RelativeLayout android:visibility="gone"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="200dp">-->
+
+            <!--<com.zanlabs.widget.infiniteviewpager.InfiniteViewPager-->
+                <!--android:id="@+id/viewpager"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="fill_parent"-->
+                <!--android:visibility="visible" />-->
+
+            <!--<com.zanlabs.widget.infiniteviewpager.indicator.LinePageIndicator-->
+                <!--android:id="@+id/indicator"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--app:fillColor="#e3ffc7"-->
+                <!--app:pageColor="#5fff65" />-->
+        <!--</RelativeLayout>-->
 
     </FrameLayout>
 </layout>
