@@ -6,6 +6,7 @@ import com.fedorkzsoft.demo.network.model.NCurrencyConverter;
 import com.fedorkzsoft.demo.presentation.model.Currency;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -23,6 +24,7 @@ public class CurrenciesModel {
     // (and only the last value) emitted by the source Observable,
     // and only after that source Observable completes.
     private AsyncSubject<List<Currency>> mAsyncSubject;
+    private AsyncSubject<Boolean> mAsyncApplySubject;
 
     @Inject
     public CurrenciesModel(Api api) {
@@ -50,5 +52,18 @@ public class CurrenciesModel {
                 }).subscribe(mAsyncSubject);
         }
         return mAsyncSubject;
+    }
+
+
+    public Observable<Boolean> applyTransaction() {
+        if (mAsyncApplySubject == null) {
+            mAsyncApplySubject = AsyncSubject.create();
+
+            Observable.just(true)
+//                    .timer(Math.round(50000 * Math.random()), TimeUnit.MILLISECONDS)
+                    .subscribe(mAsyncApplySubject);
+
+        }
+        return mAsyncApplySubject;
     }
 }

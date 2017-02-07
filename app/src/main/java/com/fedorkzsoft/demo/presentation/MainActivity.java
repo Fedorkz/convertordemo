@@ -7,8 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.fedorkzsoft.demo.R;
 
-public class MainActivity extends AppCompatActivity implements RepoInputFragment
-        .OnRepoInputListener {
+public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,22 +19,8 @@ public class MainActivity extends AppCompatActivity implements RepoInputFragment
         }
 
         FragmentManager manager = getSupportFragmentManager();
-        RepoInputFragment firstFragment = new RepoInputFragment();
+        ConvertorFragment fragment = new ConvertorFragment();
         manager.beginTransaction()
-                .add(R.id.fragment_container, firstFragment).commit();
-    }
-
-    @Override
-    public void onDataReady(String repo) {
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-
-        transaction.replace(R.id.fragment_container,
-                ConvertorFragment.newInstance());
-
-        if (manager.getBackStackEntryCount() == 0) {
-            transaction.addToBackStack(null);
-        }
-        transaction.commit();
+                .add(R.id.fragment_container, fragment).commit();
     }
 }

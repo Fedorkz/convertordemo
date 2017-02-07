@@ -20,16 +20,16 @@ import rx.Observable;
 public abstract class ConvertorFragmentPresenter extends MvpPresenter<ConvertorFragmentPresenter.View> {
     public interface View extends MvpView {
         void showLoading();
-
         void hideLoading();
 
+        void showError(String error);// Here should be some error object
+        void showSuccess(String error);// Here should be some error object
+
         void setRates(List<Currency> lst);
+        void setUserMoney(HashMap<CurrencyCode, Double> wallet);
 
         void setFromAmount(double amount);
-
         void setToAmount(double amount);
-
-        void setUserMoney(HashMap<CurrencyCode, Double> wallet);
     }
 
     public abstract void resume();
@@ -50,4 +50,5 @@ public abstract class ConvertorFragmentPresenter extends MvpPresenter<ConvertorF
     public abstract double calculateConvertation(Currency from, Currency to, double amount);//used to draw
     public abstract void setActiveConvertation(Currency from, Currency to, double amount);
 
+    public abstract void applyTransaction();
 }

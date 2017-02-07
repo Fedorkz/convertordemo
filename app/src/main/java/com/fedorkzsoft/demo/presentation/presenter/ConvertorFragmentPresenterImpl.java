@@ -17,6 +17,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -140,6 +141,21 @@ public class ConvertorFragmentPresenterImpl extends ConvertorFragmentPresenter {
     @Override
     public void setActiveConvertation(Currency from, Currency to, double amount) {
 
+    }
+
+    @Override
+    public void applyTransaction() {
+        getViewState().showLoading();
+        mModel.applyTransaction()
+                .subscribe(isSucces -> {
+                    getViewState().hideLoading();
+
+
+                   if (isSucces)
+                       getViewState().showSuccess("Success");
+                    else
+                       getViewState().showError("Some error occured...");
+                });
     }
 
     protected void startUpdates(){

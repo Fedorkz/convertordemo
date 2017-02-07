@@ -2,7 +2,6 @@ package com.fedorkzsoft.demo.presentation;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -27,8 +27,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 import timber.log.Timber;
 
@@ -56,7 +54,7 @@ public class ConvertorFragment extends MvpAppCompatFragment implements Convertor
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_list, container, false);
+        View root = inflater.inflate(R.layout.fragment_exchange, container, false);
         ButterKnife.bind(this, root);
 
         setHasOptionsMenu(true);
@@ -136,6 +134,16 @@ public class ConvertorFragment extends MvpAppCompatFragment implements Convertor
     }
 
     @Override
+    public void showError(String error) {
+        Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showSuccess(String succes) {
+        Toast.makeText(getContext(), "Successful transaction! " + succes, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
     public void setRates(List<Currency> lst) {
         mPagerFrom.setDataList(lst);
         mPagerTo.setDataList(lst);
@@ -168,9 +176,8 @@ public class ConvertorFragment extends MvpAppCompatFragment implements Convertor
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_refresh) {
-//            mModel.reset();
-//            fetchData();
+        if (id == R.id.action_submit) {
+            mConvertorPresenter.applyTransaction();
             return true;
         }
 

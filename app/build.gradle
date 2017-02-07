@@ -88,7 +88,6 @@ dependencies {
     compile 'com.arello-mobile:moxy-android:1.4.5'
     compile 'com.arello-mobile:moxy-app-compat:1.4.5'
 
-    compile 'com.github.Fedorkz:InfiniteCycleViewPager:1.0.7'
     compile 'com.github.Fedorkz:InfiniteViewPager:1.0.0'
 
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
