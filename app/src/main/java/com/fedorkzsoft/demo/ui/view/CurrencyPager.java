@@ -6,7 +6,6 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.zanlabs.widget.infiniteviewpager.InfiniteViewPager;
@@ -20,15 +19,22 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observable;
+import rx.subjects.PublishSubject;
+
+import static android.support.v4.view.ViewPager.SCROLL_STATE_IDLE;
 
 /**
  * Created by FedorkZ on 07/02/2017.
  */
 
 public class CurrencyPager extends RelativeLayout{
-
     @Bind(R.id.viewpager) InfiniteViewPager mViewPager;
     @Bind(R.id.indicator) PageIndicator mCircleIndicator;
+
+    CalcResolver mCalcResolver;
+    boolean mIsScrolling = false;
+    PublishSubject<Currency> mUpdateSubject = PublishSubject.create();
+
     private CurrencyPagerAdapter mPagerAdapter;
 
     public CurrencyPager(Context context) {
@@ -69,7 +75,12 @@ public class CurrencyPager extends RelativeLayout{
     }
 
     public Observable<Pair<Currency, Double>> getObservable(){
-        return mPagerAdapter.getObservable();
+        return mPagerAdapter.getObservable()
+                .filter(currencyDoublePair -> !mIsScrolling);
+    }
+
+    public Observable<Currency> getScrollObservable(){
+        return mUpdateSubject;
     }
 
     private void setupPagerPageChangeListener() {
@@ -77,18 +88,19 @@ public class CurrencyPager extends RelativeLayout{
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
             public void onPageSelected(int position) {
-//                if (mOnCurrencyChangeListener != null){}
-//                    mOnCurrencyChangeListener.currencyChanged(mPagerAdapter.getItem(position));
+                int i = mViewPager.getCurrentItem();
+                if (mPagerAdapter != null && mPagerAdapter.getItemCount() != 0)
+                    mUpdateSubject.onNext(mPagerAdapter.getItem(i));
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                mIsScrolling =
+                        state != SCROLL_STATE_IDLE;
             }
         });
     }
@@ -122,21 +134,25 @@ public class CurrencyPager extends RelativeLayout{
         });
     }
 
-    public void addOnPageChangeListener(ViewPager.OnPageChangeListener lst){
-        mViewPager.addOnPageChangeListener(lst);
-    }
-
     public void setDataList(List<Currency> list){
         mPagerAdapter.setDataList(list);
     }
 
-    boolean mMuteVal = false;
-    public void setAmount(double amount) {
-        mMuteVal = true;
-        View viewWithTag = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
-        if (viewWithTag != null && viewWithTag instanceof EditText){
-            ((EditText)viewWithTag).setText(String.valueOf(amount));
+    public void updateViews(){//WOOOF
+        int n = mViewPager.getChildCount();
+        for (int i = 0; i< n; i++){
+            mPagerAdapter.updateView(mViewPager.getChildAt(i));
         }
-        mMuteVal = false;
+
+        mPagerAdapter.notifyDataSetChanged();
+    }
+
+    public void setCalcResolver(CalcResolver calcResolver) {
+        mPagerAdapter.setCalcResolver(calcResolver);
+        this.mCalcResolver = calcResolver;
+    }
+
+    public interface CalcResolver{
+        double getCalculatedValue(Currency cur);
     }
 }

@@ -44,6 +44,9 @@ public abstract class ConvertorFragmentPresenter extends MvpPresenter<ConvertorF
     public abstract double calculateConvertationFrom(Currency from, double amount);//used to draw
     public abstract double calculateConvertationTo(Currency to, double amount);//used to draw
 
+    public abstract double recalculateConvertationFrom();//used to draw
+    public abstract double recalculateConvertationTo();//used to draw
+
     public abstract double calculateConvertation(Currency from, Currency to, double amount);//used to draw
     public abstract void setActiveConvertation(Currency from, Currency to, double amount);
 

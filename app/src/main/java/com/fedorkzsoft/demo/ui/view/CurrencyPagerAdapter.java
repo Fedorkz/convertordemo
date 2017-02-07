@@ -15,6 +15,7 @@ import com.zanlabs.widget.infiniteviewpager.InfinitePagerAdapter;
 import java.util.List;
 
 import rx.Observable;
+import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 /**
@@ -24,9 +25,11 @@ public class CurrencyPagerAdapter extends InfinitePagerAdapter {
 
     private final LayoutInflater mInflater;
     private final Context mContext;
+    private final
     PublishSubject<Pair<Currency, Double>> mCurrencySubject = PublishSubject.create();
 
     private List<Currency> mList;
+    private CurrencyPager.CalcResolver mCalcResolver;
 
     public void setDataList(List<Currency> list) {
         if (list == null || list.size() == 0)
@@ -41,6 +44,16 @@ public class CurrencyPagerAdapter extends InfinitePagerAdapter {
         mInflater = LayoutInflater.from(mContext);
     }
 
+    public void updateView(View v){
+        if (v == null)
+            return;
+
+        Object tag = v.getTag();
+        if (tag instanceof ViewHolder){
+            ((ViewHolder)tag).recalculate(mCalcResolver);
+        }
+    }
+    
     @Override
     public View getView(int position, View view, ViewGroup container) {
         ViewHolder holder;
@@ -60,7 +73,13 @@ public class CurrencyPagerAdapter extends InfinitePagerAdapter {
         holder.name.setText(item.getCurrency());
         holder.rate.setText("Rate: " + item.getRate());
 
-        holder.getObservable().subscribe(currencyDoublePair -> {
+        if (mCalcResolver != null)
+            holder.setValue(mCalcResolver.getCalculatedValue(item));
+
+
+        holder.getObservable()
+                .filter(currencyDoublePair -> holder.val.isFocused())
+                .subscribe(currencyDoublePair -> {
             mCurrencySubject.onNext(currencyDoublePair);
         });
 
@@ -75,6 +94,9 @@ public class CurrencyPagerAdapter extends InfinitePagerAdapter {
         return Double.parseDouble(s);
     }
 
+    public void setCalcResolver(CurrencyPager.CalcResolver calcResolver) {
+        this.mCalcResolver = calcResolver;
+    }
 
     @Override
     public int getItemCount() {
@@ -91,7 +113,7 @@ public class CurrencyPagerAdapter extends InfinitePagerAdapter {
         TextView name;
         TextView rate;
         TextView amount;
-        TextView val;
+        private TextView val;
 
         public ViewHolder(View view) {
             name = (TextView) view.findViewById(R.id.currency_txt);
@@ -104,6 +126,17 @@ public class CurrencyPagerAdapter extends InfinitePagerAdapter {
             return RxTextView.textChanges(val)
                     .filter(charSequence -> !charSequence.toString().isEmpty())
                     .map(val -> new Pair<>(currency, parseDouble(val)));
+        }
+
+        public void recalculate(CurrencyPager.CalcResolver calc){
+            if (calc != null)
+                setValue(calc.getCalculatedValue(currency));
+        }
+
+        public void setValue(double value){
+            val.setText(String.valueOf(
+                    Math.round(value * 100) / 100d
+            ));
         }
     }
 

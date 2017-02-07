@@ -67,13 +67,17 @@ public class ConvertorFragmentPresenterImpl extends ConvertorFragmentPresenter {
 
     @Override
     public void setFromAmount(double from) {
+        setFromAmount(from, false);
+    }
+
+    public void setFromAmount(double from, boolean forceUpdate) {
         mIsForwardConversion = true;
         mFromAmount = from;
         if (mFromCurrency != null && mToCurrency != null) {
             double v = calculateConvertation(mFromCurrency, mToCurrency, mFromAmount);
-            if (mToAmount != v) {
+            if (forceUpdate || mToAmount != v) {
                 mToAmount = v;
-                getViewState().setToAmount(mToAmount);
+//                getViewState().setToAmount(mToAmount);
             }
         }
 
@@ -81,13 +85,17 @@ public class ConvertorFragmentPresenterImpl extends ConvertorFragmentPresenter {
 
     @Override
     public void setToAmount(double to) {
+        setToAmount(to, false);
+    }
+
+    public void setToAmount(double to, boolean forceUpdate) {
         mIsForwardConversion = false;
         mToAmount = to;
         if (mFromCurrency != null && mToCurrency != null) {
             double v = calculateConvertation(mToCurrency, mFromCurrency, mToAmount);
-            if (mFromAmount != v) {
+            if (forceUpdate || mFromAmount != v) {
                 mFromAmount = v;
-                getViewState().setFromAmount(mFromAmount);
+//                getViewState().setFromAmount(mFromAmount);
             }
         }
     }
@@ -106,6 +114,18 @@ public class ConvertorFragmentPresenterImpl extends ConvertorFragmentPresenter {
             return 0;
 
         return calculateConvertation(to, mFromCurrency, amount);
+    }
+
+    @Override
+    public double recalculateConvertationFrom() {
+        setToAmount(mToAmount, true);
+        return mFromAmount;
+    }
+
+    @Override
+    public double recalculateConvertationTo() {
+        setFromAmount(mFromAmount, true);
+        return mToAmount;
     }
 
     @Override

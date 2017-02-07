@@ -1,6 +1,7 @@
 package com.fedorkzsoft.demo.presentation;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -61,7 +62,44 @@ public class ConvertorFragment extends MvpAppCompatFragment implements Convertor
         setHasOptionsMenu(true);
         return root;
     }
-    void initPager(View v){
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initPager();
+    }
+
+    void initPager(){
+        mPagerFrom.getObservable()
+                .subscribe(currencyDoublePair -> {
+                    mConvertorPresenter.setFromCurrency(currencyDoublePair.first);
+                    mConvertorPresenter.setFromAmount(currencyDoublePair.second);
+                    mPagerTo.updateViews();
+
+                });
+
+        mPagerTo.getObservable()
+                .subscribe(currencyDoublePair -> {mConvertorPresenter.setToCurrency(currencyDoublePair.first);
+                    mConvertorPresenter.setToCurrency(currencyDoublePair.first);
+                    mConvertorPresenter.setToAmount(currencyDoublePair.second);
+                    mPagerFrom.updateViews();
+                });
+
+        mPagerFrom.getScrollObservable()
+                .subscribe(currency -> {
+                    mConvertorPresenter.setFromCurrency(currency);
+                    mPagerFrom.updateViews();
+                });
+
+        mPagerTo.getScrollObservable()
+                .subscribe(currency -> {
+                    mConvertorPresenter.setToCurrency(currency);
+                    mPagerTo.updateViews();
+                });
+
+        mPagerTo.setCalcResolver(cur -> mConvertorPresenter.recalculateConvertationTo());
+        mPagerFrom.setCalcResolver(cur -> mConvertorPresenter.recalculateConvertationFrom());
+
     }
 
     @Override
@@ -101,27 +139,18 @@ public class ConvertorFragment extends MvpAppCompatFragment implements Convertor
     public void setRates(List<Currency> lst) {
         mPagerFrom.setDataList(lst);
         mPagerTo.setDataList(lst);
-
-        mPagerFrom.getObservable()
-                .subscribe(currencyDoublePair -> {
-                    mConvertorPresenter.setFromCurrency(currencyDoublePair.first);
-                    mConvertorPresenter.setFromAmount(currencyDoublePair.second);
-                });
-
-        mPagerTo.getObservable()
-                .subscribe(currencyDoublePair -> {mConvertorPresenter.setToCurrency(currencyDoublePair.first);
-                    mConvertorPresenter.setToAmount(currencyDoublePair.second);
-                });
     }
 
     @Override
     public void setFromAmount(double amount) {
-        mPagerFrom.setAmount(amount);
+        mPagerFrom.updateViews();
+//        mPagerFrom.setAmount(amount);
     }
 
     @Override
     public void setToAmount(double amount) {
-        mPagerTo.setAmount(amount);
+        mPagerFrom.updateViews();
+//        mPagerTo.setAmount(amount);
     }
 
     @Override
