@@ -1,8 +1,10 @@
 # convertor demo
 Libraries used in this example:
  * RxJava & RxAndroid & RxBindings
- * Dagger 2
  * Retrofit 
+ * Moxy (View state pattern)
+ * Dagger 2 (Dependency injection)
  * LeakCanary
  * Lombok
  * Retrolamda
+ * Butterkinfe
