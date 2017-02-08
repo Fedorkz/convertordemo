@@ -5,3 +5,4 @@ Libraries used in this example:
  * Retrofit 
  * LeakCanary
  * Lombok
+ * Retrolamda
